@@ -7,26 +7,36 @@ import { emailRegister, emailForgotPassword } from '../helpers/emails.js';
 
 const authenticate = async (req, res) => {
     await check('email').isEmail().withMessage('El email introducido no es válido').run(req);
-    await check('password').isLength({min: 6}).withMessage('La contraseña debe ser mayor a 6 carácteres').run(req);
+    await check('password').isLength({ min: 6 }).withMessage('La contraseña debe ser mayor a 6 carácteres').run(req);
 
     let result = validationResult(req);
-    if(!result.isEmpty()){
+    let errors = {};
+    result.array().map(resulState => {
+        const { param, msg } = resulState;
+        if (param == 'email') {
+            errors = { ...errors, email: msg };
+        }
+        if (param == 'password') {
+            errors = { ...errors, password: msg };
+        }
+    });
+    if (!result.isEmpty()) {
         return res.status(400).json({
             status: 400,
-            errors: result.array()
+            errors: errors
         });
     }
     const { email, password } = req.body;
     const user = await Users.findOne({ where: { email } })
 
-    if(!user){
-        return res.status(400).json({
-            status: 400,
+    if (!user) {
+        return res.status(404).json({
+            status: 404,
             msg: 'El email no está asociado a una cuenta'
         });
     }
 
-    if(user.verified === 0){
+    if (user.verified === 0) {
         return res.status(403).json({
             status: 403,
             msg: 'Tu cuenta no ha sido confirmada'
@@ -34,16 +44,18 @@ const authenticate = async (req, res) => {
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
-    if(!validPassword){
+    if (!validPassword) {
         return res.status(400).json({
             status: 400,
-            msg: 'Contraseña incorrecta'
+            errors: {
+                password: 'Contraseña incorrecta'
+            }
         });
     }
 
-    const token = generateJWT({id: user.id, name: user.name});
+    const token = generateJWT({ id: user.id, name: user.name });
 
-    res.status(200).header('auth-token', token).json({
+    res.status(200).header('authorization', token).json({
         status: 200,
         id: user.id,
         name: user.name,
@@ -57,7 +69,8 @@ const register = async (req, res) => {
     await check('last_name').notEmpty().withMessage('El apellido es obligatorio').run(req);
     await check('email').isEmail().withMessage('No es un email valido').run(req);
     await check('password').isLength({ min: 6 }).withMessage('La contraseña debe de ser al menos 6 carácteres').run(req);
-
+    await check('confirm_password').equals(req.body.password).withMessage('Las contraseñas no coinciden').run(req);
+    
     let result = validationResult(req);
     if (!result.isEmpty()) {
         return res.status(400).json({
@@ -121,20 +134,27 @@ const confirmAccount = async (req, res) => {
 }
 
 const forgotPassword = async (req, res) => {
-    await check('email').isEmail().withMessage('No es un email valido').run(req);
+    await check('email').isEmail().withMessage('El email introducido no es válido').run(req);
 
     let result = validationResult(req);
-    if(!result.isEmpty()){
+    let errors = {};
+    result.array().map(resulState => {
+        const { param, msg } = resulState;
+        if (param == 'email') {
+            errors = { ...errors, email: msg };
+        }
+    });
+    if (!result.isEmpty()) {
         return res.status(400).json({
             status: 400,
-            errors: result.array()
+            errors: errors
         });
     }
 
     const { email } = req.body;
-    const user = await Users.findOne({where: {email}});
+    const user = await Users.findOne({ where: { email } });
 
-    if(!user){
+    if (!user) {
         return res.status(404).json({
             status: 404,
             msg: 'El email no está asociado a ninguna cuenta',
@@ -152,7 +172,8 @@ const forgotPassword = async (req, res) => {
 
     res.status(200).json({
         status: 200,
-        msg: 'Hemos enviado un email con las instrucciones'
+        title: 'Solicitud enviada',
+        msg: 'Hemos enviado un email con las instrucciones para recuperar tu contraseña'
     });
 }
 
@@ -160,28 +181,34 @@ const checkPassword = async (req, res) => {
     const { token } = req.params;
     const user = await Users.findOne({ where: { token } });
 
-    if(!user){
+    if (!user) {
         return res.status(400).json({
             status: 400,
-            msg: 'Token no válido'
+            msg: 'Lo sentimos, el token ingresado no es válido'
         });
     }
 
     res.status(200).json({
         status: 200,
-        msg: 'Token válido'
+        msg: '¡Solicitud confirmada!'
     });
 }
 
 const resetPassword = async (req, res) => {
-    await check('password').isLength({min: 6}).withMessage('La contraseña debe ser de al menos 6 carácteres').run(req);
+    await check('password').isLength({ min: 6 }).withMessage('La contraseña debe ser de al menos 6 carácteres').run(req);
 
     let result = validationResult(req);
-
-    if(!result.isEmpty()){
+    let errors = {};
+    result.array().map(resulState => {
+        const { param, msg } = resulState;
+        if (param == 'password') {
+            errors = { ...errors, password: msg };
+        }
+    });
+    if (!result.isEmpty()) {
         return res.status(400).json({
             status: 400,
-            errors: result.array()
+            errors: errors
         })
     }
 
@@ -189,6 +216,13 @@ const resetPassword = async (req, res) => {
     const { password } = req.body;
 
     const user = await Users.findOne({ where: { token } });
+
+    if(!user){
+        return res.status(403).json({
+            status: 403,
+            msg: 'Lo sentimos, el token ingresado no es válido'
+        });
+    }
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);

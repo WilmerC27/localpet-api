@@ -21,7 +21,7 @@ const emailRegister = async (data) => {
         html: `
             <p>Hola ${name} ${last_name}, comprueba tu cuenta en localpetcancun.com</p>
             <p>Tu cuenta ya está lista, solo debes confirmarla en el siguiente enlace: 
-                <a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 3000}/api/confirm/${token}">Confirmar Cuenta</a>
+                <a href="${process.env.FRONTEND_URL}/confirm/${token}">Confirmar Cuenta</a>
             </p>
             <p>Si tu no creaste está cuenta, puedes ignorar el mensaje</p>
 
@@ -51,7 +51,7 @@ const emailForgotPassword = async (datos) => {
             <p>Hola ${nombre}, has solicitado reestablecer tu contraseña en localpetcancun.com</p>
 
             <p>Sigue el siguiente enlace para generar una contraseña nueva: 
-                <a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 3000}/auth/reset-password/${token}">Reestablecer Contraseña</a>
+                <a href="${process.env.FRONTEND_URL}/forgot-password/${token}">Reestablecer Contraseña</a>
             </p>
             <p>Si tu no creaste el cambio de contraseña, puedes ignorar el mensaje</p>
         `
