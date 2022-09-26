@@ -67,15 +67,34 @@ const authenticate = async (req, res) => {
 const register = async (req, res) => {
     await check('name').notEmpty().withMessage('El nombre el obligatorio').run(req);
     await check('last_name').notEmpty().withMessage('El apellido es obligatorio').run(req);
-    await check('email').isEmail().withMessage('No es un email valido').run(req);
+    await check('email').isEmail().withMessage('No es un email válido').run(req);
     await check('password').isLength({ min: 6 }).withMessage('La contraseña debe de ser al menos 6 carácteres').run(req);
     await check('confirm_password').equals(req.body.password).withMessage('Las contraseñas no coinciden').run(req);
     
     let result = validationResult(req);
+    let errors = {};
+    result.array().map(resulState => {
+        const { param, msg } = resulState;
+        if (param == 'name') {
+            errors = { ...errors, name: msg };
+        }
+        if (param == 'last_name') {
+            errors = { ...errors, last_name: msg };
+        }
+        if (param == 'email') {
+            errors = { ...errors, email: msg };
+        }
+        if (param == 'password') {
+            errors = { ...errors, password: msg };
+        }
+        if (param == 'confirm_password') {
+            errors = { ...errors, confirm_password: msg };
+        }
+    });
     if (!result.isEmpty()) {
         return res.status(400).json({
             status: 400,
-            errors: result.array()
+            errors: errors
         });
     }
 
@@ -107,8 +126,7 @@ const register = async (req, res) => {
 
     res.status(200).json({
         status: 201,
-        msg: '¡Cuenta Creada Correctamente!',
-        user: user.dataValues
+        msg: '¡Cuenta Creada Correctamente!'
     });
 }
 

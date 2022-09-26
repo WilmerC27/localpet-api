@@ -1,5 +1,6 @@
 import express from 'express';
 import usersRoutes from './routes/usersRoutes.js';
+import veterinaryRoutes from './routes/veterinaryRoutes.js';
 import db from './config/db.js';
 const app = express();
 
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/api', usersRoutes);
+app.use('/api', veterinaryRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

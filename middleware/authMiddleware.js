@@ -18,7 +18,8 @@ const checkAuth = (req, res, next) => {
     }
     if (!token) {
         return res.status(401).json({
-            msg: 'Acceso Denegado'
+            status: 401,
+            msg: 'Unauthorized'
         });
     }
 }
