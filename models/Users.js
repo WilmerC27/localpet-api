@@ -19,6 +19,13 @@ const Users = db.define('users', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    idRol: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'roles',
+            key: 'id'
+        }
+    },
     token: DataTypes.STRING,
     verified: DataTypes.BOOLEAN
 }, {
