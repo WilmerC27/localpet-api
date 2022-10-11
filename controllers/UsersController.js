@@ -58,10 +58,13 @@ const authenticate = async (req, res) => {
 
     res.status(200).header('authorization', token).json({
         status: 200,
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        token: token
+        user: {
+            id: user.id,
+            name: user.name,
+            last_name: user.last_name,
+            email: user.email,
+            token: token
+        }
     });
 }
 

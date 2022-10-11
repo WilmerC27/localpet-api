@@ -61,6 +61,10 @@ const Veterinary = db.define('veterinary', {
     store_number: {
         type: DataTypes.STRING,
     },
+    imgUrl: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     idUser: {
         type: DataTypes.INTEGER,
         references: {

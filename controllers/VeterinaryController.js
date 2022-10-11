@@ -1,17 +1,33 @@
 import { check, validationResult } from 'express-validator';
 import Veterinary from "../models/Veterinary.js";
+import path from 'path';
 
 const createVeterinary = async (req, res) => {
+    const __dirname = path.resolve();
     await check('clee').notEmpty().withMessage('El clee es obligatorio').run(req);
     await check('name').notEmpty().withMessage('El nombre es obligatorio').run(req);
     await check('email').isEmail().withMessage('El email no es válido').run(req);
     await check('street').notEmpty().withMessage('La calle es obligatoria').run(req);
     await check('colony').notEmpty().withMessage('La colonia es obligatoria').run(req);
     await check('code_postal').isLength({ min: 5, max: 5 }).withMessage('El código postal debe ser igual a 5 digitos').run(req);
-    await check('ubication').notEmpty().withMessage('La ubicación es obligatoria').run(req);
+    await check('location').notEmpty().withMessage('La ubicación es obligatoria').run(req);
     await check('phone_number').isLength({ min: 10 }).withMessage('El número telefonico debe ser igual a 10 dígitos').run(req);
     await check('longitude').notEmpty().withMessage('La longitud es obligatoria').run(req);
     await check('latitude').notEmpty().withMessage('La latitud es obligatoria').run(req);
+
+    let image = '';
+    let nameImage = '';
+    if(req.files){
+        image = req.files.imgUrl;
+        console.log(image);
+        nameImage = Date.now().toString(32) + Math.random().toString(32).substring(2);
+        image.mv(`./imgVeterinaries/${nameImage}.jpg`, err => {
+            if (err) {
+                return res.status(500).json({ msg: 'Hubo error con la imagen' })
+            }
+            console.log('Imagen Subida Correctamente');
+        })
+    }
 
     let result = validationResult(req);
     let errors = {};
@@ -47,6 +63,10 @@ const createVeterinary = async (req, res) => {
         if (param == 'latitude') {
             errors = { ...errors, latitude: msg };
         }
+        if (param == 'imgUrl') {
+            errors = { ...errors, imgUrl: msg };
+
+        }
     });
     if (!result.isEmpty()) {
         return res.status(400).json({
@@ -55,7 +75,7 @@ const createVeterinary = async (req, res) => {
         })
     }
 
-    const { clee, name, business_name, class_activity, email, street, no_ext, no_int, colony, code_postal, ubication, phone_number, website, longitude, latitude, store_number } = req.body;
+    const { clee, name, business_name, class_activity, email, street, no_ext, no_int, colony, code_postal, location, phone_number, website, longitude, latitude, store_number } = req.body;
 
     const existVeterinary = await Veterinary.findOne({ where: { clee } })
     if (existVeterinary) {
@@ -77,12 +97,13 @@ const createVeterinary = async (req, res) => {
         no_int: no_int,
         colony: colony,
         code_postal: code_postal,
-        ubication: ubication,
+        ubication: location,
         phone_number: phone_number,
         website: website,
         longitude: longitude,
         latitude: latitude,
         store_number: store_number,
+        imgUrl: `${__dirname}/${nameImage}.jpg`,
         idUser: id
     })
 
@@ -119,7 +140,7 @@ const findVeterinary = async (req, res) => {
 
 const editVeterinary = async (req, res) => {
     const { id } = req.params;
-    
+
     const numberId = parseInt(id);
     if (isNaN(numberId)) {
         return res.status(400).json({
@@ -128,9 +149,9 @@ const editVeterinary = async (req, res) => {
         });
     }
 
-    const veterinary = await Veterinary.findOne({where: {id}});
+    const veterinary = await Veterinary.findOne({ where: { id } });
 
-    if(!veterinary){
+    if (!veterinary) {
         return res.status(404).json({
             status: 404,
             msg: 'La veterinaria seleccionada no existe'
@@ -156,7 +177,7 @@ const editVeterinary = async (req, res) => {
 
     const veterinaryUpdate = await veterinary.save();
 
-    return res.status(200).json({ 
+    return res.status(200).json({
         status: 200,
         msg: 'Veterinaria Editada Correctamente',
         veterinaryUpdate
@@ -174,7 +195,7 @@ const deleteVeterinary = async (req, res) => {
     }
 
     try {
-        await Veterinary.destroy({where: {id}});
+        await Veterinary.destroy({ where: { id } });
         return res.status(200).json({
             status: 200,
             msg: 'Veterinaria eliminada correctamente'

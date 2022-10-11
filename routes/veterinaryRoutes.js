@@ -1,7 +1,6 @@
 import express from "express";
-import { createVeterinary, findVeterinary, editVeterinary, deleteVeterinary } from "../controllers/VeterinaryController.js";
 import checkAuth from "../middleware/authMiddleware.js";
-
+import { createVeterinary, findVeterinary, editVeterinary, deleteVeterinary } from "../controllers/VeterinaryController.js";
 const router = express.Router();
 
 router.post('/veterinary/create', checkAuth, createVeterinary);
