@@ -17,17 +17,6 @@ const createVeterinary = async (req, res) => {
 
     let image = '';
     let nameImage = '';
-    if(req.files){
-        image = req.files.imgUrl;
-        console.log(image);
-        nameImage = Date.now().toString(32) + Math.random().toString(32).substring(2);
-        image.mv(`./imgVeterinaries/${nameImage}.jpg`, err => {
-            if (err) {
-                return res.status(500).json({ msg: 'Hubo error con la imagen' })
-            }
-            console.log('Imagen Subida Correctamente');
-        })
-    }
 
     let result = validationResult(req);
     let errors = {};
@@ -51,8 +40,8 @@ const createVeterinary = async (req, res) => {
         if (param == 'code_postal') {
             errors = { ...errors, code_postal: msg };
         }
-        if (param == 'ubication') {
-            errors = { ...errors, ubication: msg };
+        if (param == 'location') {
+            errors = { ...errors, location: msg };
         }
         if (param == 'phone_number') {
             errors = { ...errors, phone_number: msg };
@@ -63,7 +52,7 @@ const createVeterinary = async (req, res) => {
         if (param == 'latitude') {
             errors = { ...errors, latitude: msg };
         }
-        if (param == 'imgUrl') {
+        if (req.files == 'imgUrl') {
             errors = { ...errors, imgUrl: msg };
 
         }
@@ -107,7 +96,19 @@ const createVeterinary = async (req, res) => {
         idUser: id
     })
 
-    return res.json({
+    if (req.files) {
+        image = req.files.imgUrl;
+        console.log(image);
+        nameImage = Date.now().toString(32) + Math.random().toString(32).substring(2);
+        image.mv(`./imgVeterinaries/${nameImage}.jpg`, err => {
+            if (err) {
+                return res.status(500).json({ msg: 'Hubo error con la imagen' })
+            }
+            console.log('Imagen Subida Correctamente');
+        })
+    }
+
+    return res.status(201).json({
         status: 201,
         msg: "¡Veterinaria Registrada Correctamente"
     })
@@ -143,8 +144,8 @@ const editVeterinary = async (req, res) => {
 
     const numberId = parseInt(id);
     if (isNaN(numberId)) {
-        return res.status(400).json({
-            status: 400,
+        return res.status(403).json({
+            status: 403,
             msg: 'El id de la veterinaria es inválido'
         });
     }
@@ -154,34 +155,64 @@ const editVeterinary = async (req, res) => {
     if (!veterinary) {
         return res.status(404).json({
             status: 404,
-            msg: 'La veterinaria seleccionada no existe'
+            msg: 'La veterinaria no encontrada'
         })
     }
 
-    veterinary.clee = req.body.clee || veterinary.clee;
-    veterinary.name = req.body.name || veterinary.name;
-    veterinary.business_name = req.body.business_name || veterinary.business_name;
-    veterinary.class_activity = req.body.class_activity || veterinary.class_activity;
+    await check('email').isEmail().withMessage('El email es requerido').run(req);
+    await check('phone_number').isLength({ max: 10, min: 10 }).withMessage('El teléfono es obligatorio').run(req);
+    if(req.body.no_ext !== ''){
+        await check('no_ext').isNumeric().withMessage('El no ext es inválido').run(req);
+    }
+    if(req.body.website !== ''){
+        await check('website').isURL().withMessage('No es un url válido').run(req);
+    }
+
+    let result = validationResult(req);
+    let errors = {};
+    result.array().map(resulState => {
+        const { param, msg } = resulState;
+        if (param == 'email') {
+            errors = { ...errors, email: msg };
+        }
+        if (param == 'phone_number') {
+            errors = { ...errors, phone_number: msg };
+        }
+        if (param == 'no_ext') {
+            errors = { ...errors, no_ext: msg };
+        }
+        if (param == 'website') {
+            errors = { ...errors, website: msg };
+        }
+    });
+
+    if (!result.isEmpty()) {
+        return res.status(400).json({
+            status: 400,
+            errors
+        })
+    }
+
     veterinary.email = req.body.email || veterinary.email;
-    veterinary.street = req.body.street || veterinary.street;
     veterinary.no_ext = req.body.no_ext || veterinary.no_ext;
-    veterinary.no_int = req.body.no_int || veterinary.no_int;
-    veterinary.colony = req.body.colony || veterinary.colony;
-    veterinary.code_postal = req.body.code_postal || veterinary.code_postal;
-    veterinary.ubication = req.body.ubication || veterinary.ubication;
     veterinary.phone_number = req.body.phone_number || veterinary.phone_number;
     veterinary.website = req.body.website || veterinary.website;
-    veterinary.longitude = req.body.longitude || veterinary.longitude;
-    veterinary.latitude = req.body.latitude || veterinary.latitude;
     veterinary.store_number = req.body.store_number || veterinary.store_number;
+    // veterinary.imgUrl = req.files.imgUrl || veterinary.imgUrl;
 
-    const veterinaryUpdate = await veterinary.save();
+    try {
+        const veterinaryUpdate = await veterinary.save();
+        return res.status(200).json({
+            status: 200,
+            msg: 'Veterinaria Editada Correctamente',
+            veterinaryUpdate
+        });
+    } catch (error) {
+        return res.json({
+            msg: 'Hubo un error'
+        })
+    }
 
-    return res.status(200).json({
-        status: 200,
-        msg: 'Veterinaria Editada Correctamente',
-        veterinaryUpdate
-    });
 };
 
 const deleteVeterinary = async (req, res) => {
@@ -189,7 +220,7 @@ const deleteVeterinary = async (req, res) => {
     const veterinary = await Veterinary.findOne({ where: { id } });
     if (!veterinary) {
         return res.status(404).json({
-            status: 400,
+            status: 404,
             msg: 'Veterinaria no encontrada'
         });
     }
@@ -201,7 +232,9 @@ const deleteVeterinary = async (req, res) => {
             msg: 'Veterinaria eliminada correctamente'
         })
     } catch (error) {
-        console.log(error);
+        return res.json({
+            msg: 'Lo sentimos, hubo un error'
+        })
     }
 }
 

@@ -4,8 +4,8 @@ import { createVeterinary, findVeterinary, editVeterinary, deleteVeterinary } fr
 const router = express.Router();
 
 router.post('/veterinary/create', checkAuth, createVeterinary);
-router.get('/veterinary/:id', checkAuth, findVeterinary);
-router.patch('/veterinary/:id', checkAuth, editVeterinary);
+router.get('/veterinary/edit/:id', checkAuth, findVeterinary);
+router.put('/veterinary/edit/:id', checkAuth, editVeterinary);
 router.delete('/veterinary/:id', checkAuth, deleteVeterinary);
 
 export default router;
