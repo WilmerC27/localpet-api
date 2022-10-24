@@ -33,7 +33,7 @@ const emailRegister = async (data) => {
         <body style="background-color: #F5ABBC; font-family: 'Montserrat', sans-serif;">
             <div style="background-color: #FFFFFF; border-radius: 10px; padding: 20px; width: 70%; margin: 100px auto;">
                 <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
-
+                    <img src="https://localpet.online/assets/localpet.d07de357.png" alt="logo localpet" loaging="lazy"/>
                 </div>
                 <div style="text-align: center">
                     <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Confirma tu cuenta</h1>
@@ -42,12 +42,12 @@ const emailRegister = async (data) => {
                 <p style="text-align: center"><span style="color: #FC8D47; font-weight: bold; margin: 20px auto;">¡Tu cuenta ya está lista!🎉</span>, solo debes confirmarla en el siguiente enlace: </p>
                 <br />
                 <div style="text-align: center;">
-                    <a style="text-decoration: none; background-color: #FC8D47; color: white; padding: 8px 20px; border-radius: 5px; box-shadow: 0px 0px 5px #ccc;" href="${process.env.FRONTEND_URL}/confirm/${token}">Confirmar Cuenta</a>
+                    <a style="text-decoration: none; background-color: #FC8D47; color: white; padding: 8px 20px; border-radius: 5px; box-shadow: 0px 0px 5px #ccc;" href="${process.env.FRONTEND_URL}/#/confirm/${token}">Confirmar Cuenta</a>
                 </div>
                 <br />
                 <p>Si el botón no funciona puedes entrar a través de este enlace: </p>
                 <div style="margin-bottom: 20px;">
-                    <a style="text-decoration: none;" href="${process.env.FRONTEND_URL}/confirm/${token}">${process.env.FRONTEND_URL}/confirm/${token}</a>
+                    <a style="text-decoration: none;" href="${process.env.FRONTEND_URL}/#/confirm/${token}">${process.env.FRONTEND_URL}/#/confirm/${token}</a>
                 </div>
             </div>
         </body>
@@ -66,21 +66,48 @@ const emailForgotPassword = async (datos) => {
         }
     });
 
-    const { email, nombre, token } = datos;
+    const { email, name, token } = datos;
 
     //Enviar email
     await transport.sendMail({
         from: 'localpet@gmail.com',
         to: email,
-        subject: 'Reestablece tu contraseña en localpetcancun.com',
-        text: 'Reestablece tu contraseña en localpetcancun.com',
+        subject: '¡Reestablece tu contraseña 👀!',
+        text: '¡Reestablece tu contraseña 👀!',
         html: `
-            <p>Hola ${nombre}, has solicitado reestablecer tu contraseña en localpetcancun.com</p>
-
-            <p>Sigue el siguiente enlace para generar una contraseña nueva: 
-                <a href="${process.env.FRONTEND_URL}/forgot-password/${token}">Reestablecer Contraseña</a>
-            </p>
-            <p>Si tu no creaste el cambio de contraseña, puedes ignorar el mensaje</p>
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Confirma de Cuenta</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+        </head>
+        <body style="background-color: #F5ABBC; font-family: 'Montserrat', sans-serif;">
+            <div style="background-color: #FFFFFF; border-radius: 10px; padding: 20px; width: 70%; margin: 100px auto;">
+                <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
+                    <img src="https://localpet.online/assets/localpet.d07de357.png" alt="logo localpet" loaging="lazy"/>
+                </div>
+                <div style="text-align: center">
+                    <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Recupera tu contraseña</h1>
+                </div>
+                <p style="text-align: center">Hola ${name} ${last_name}, hemos detectado que olvidaste tu contraseña 😢 </p>
+                <p style="text-align: center"><span style="color: #FC8D47; font-weight: bold; margin: 20px auto;">Reestablece tu contraseña con un simple ¡CLIC!</span>, solo debes confirmarla en el siguiente enlace: </p>
+                <br />
+                <div style="text-align: center;">
+                    <a style="text-decoration: none; background-color: #FC8D47; color: white; padding: 8px 20px; border-radius: 5px; box-shadow: 0px 0px 5px #ccc;" href="${process.env.FRONTEND_URL}/#/forgot-password/${token}">Reestablecer Contraseña</a>
+                </div>
+                <br />
+                <p>Si el botón no funciona puedes entrar a través de este enlace: </p>
+                <div style="margin-bottom: 20px;">
+                    <a style="text-decoration: none;" href="${process.env.FRONTEND_URL}/#/forgot-password/${token}">${process.env.FRONTEND_URL}/#/forgot-password/${token}</a>
+                </div>
+            </div>
+        </body>
+        </html>
         `
     })
 
