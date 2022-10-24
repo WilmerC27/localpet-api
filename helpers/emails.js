@@ -33,7 +33,7 @@ const emailRegister = async (data) => {
         <body style="background-color: #F5ABBC; font-family: 'Montserrat', sans-serif;">
             <div style="background-color: #FFFFFF; border-radius: 10px; padding: 20px; width: 70%; margin: 100px auto;">
                 <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
-                    <img src="https://localpet.online/assets/localpet.d07de357.png" alt="logo localpet" loaging="lazy"/>
+                    <img src="https://localpet.online/assets/localpet.d07de357.png" alt="logo localpet" loaging="lazy" width="90"/>
                 </div>
                 <div style="text-align: center">
                     <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Confirma tu cuenta</h1>
@@ -89,7 +89,7 @@ const emailForgotPassword = async (datos) => {
         <body style="background-color: #F5ABBC; font-family: 'Montserrat', sans-serif;">
             <div style="background-color: #FFFFFF; border-radius: 10px; padding: 20px; width: 70%; margin: 100px auto;">
                 <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
-                    <img src="https://localpet.online/assets/localpet.d07de357.png" alt="logo localpet" loaging="lazy"/>
+                    <img src="https://localpet.online/assets/localpet.d07de357.png" alt="logo localpet" loaging="lazy" width="90"/>
                 </div>
                 <div style="text-align: center">
                     <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Recupera tu contraseña</h1>
