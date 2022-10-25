@@ -36,7 +36,7 @@ const authenticate = async (req, res) => {
             msg: 'El email no está asociado a una cuenta'
         });
     }
-    console.log(user);
+
     if (user.verified === null || user.verified === undefined) {
         return res.status(403).json({
             status: 403,
@@ -170,7 +170,7 @@ const confirmAccount = async (req, res) => {
     const { token } = req.params;
 
     const user = await Users.findOne({ where: { token } });
-
+    console.log(user);
     if (!user) {
         return res.status(400).json({
             status: 400,
