@@ -15,7 +15,7 @@ const emailRegister = async (data) => {
 
     //Enviar email
     await transport.sendMail({
-        from: 'localpet@gmail.com',
+        from: 'localpet@localpet.online',
         to: email,
         subject: 'Confirma tu cuenta 🐶',
         text: 'Confirma tu cuenta 🐶',
@@ -71,7 +71,7 @@ const emailForgotPassword = async (datos) => {
 
     //Enviar email
     await transport.sendMail({
-        from: 'localpet@gmail.com',
+        from: 'localpet@localpet.online',
         to: email,
         subject: '¡Reestablece tu contraseña 👀!',
         text: '¡Reestablece tu contraseña 👀!',
