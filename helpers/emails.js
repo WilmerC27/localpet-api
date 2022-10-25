@@ -4,7 +4,6 @@ const emailRegister = async (data) => {
     const transport = nodemailer.createTransport({
         host: process.env.EMAIL_HOST,
         port: process.env.EMAIL_PORT,
-        secure: true,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS
@@ -67,7 +66,7 @@ const emailForgotPassword = async (datos) => {
         }
     });
 
-    const { email, name, token } = datos;
+    const { email, nombre, token } = datos;
 
     //Enviar email
     await transport.sendMail({
@@ -95,7 +94,7 @@ const emailForgotPassword = async (datos) => {
                 <div style="text-align: center">
                     <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Recupera tu contraseña</h1>
                 </div>
-                <p style="text-align: center">Hola ${name} ${last_name}, hemos detectado que olvidaste tu contraseña 😢 </p>
+                <p style="text-align: center">Hola ${nombre} ${last_name}, hemos detectado que olvidaste tu contraseña 😢 </p>
                 <p style="text-align: center"><span style="color: #FC8D47; font-weight: bold; margin: 20px auto;">Reestablece tu contraseña con un simple ¡CLIC!</span>, solo debes confirmarla en el siguiente enlace: </p>
                 <br />
                 <div style="text-align: center;">
