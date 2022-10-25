@@ -36,8 +36,8 @@ const authenticate = async (req, res) => {
             msg: 'El email no está asociado a una cuenta'
         });
     }
-
-    if (user.verified === 0) {
+    console.log(user);
+    if (user.verified === null || user.verified === undefined) {
         return res.status(403).json({
             status: 403,
             msg: 'Tu cuenta no ha sido confirmada'
@@ -56,15 +56,9 @@ const authenticate = async (req, res) => {
 
     const token = generateJWT({ id: user.id, name: user.name });
 
-    res.status(200).header('authorization', token).json({
+    return res.status(200).header('authorization', token).json({
         status: 200,
-        user: {
-            id: user.id,
-            name: user.name,
-            last_name: user.last_name,
-            email: user.email,
-            token: token
-        }
+        user: user
     });
 }
 
