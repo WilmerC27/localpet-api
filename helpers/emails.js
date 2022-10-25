@@ -30,11 +30,13 @@ const emailRegister = async (data) => {
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
         </head>
-        <body style="background-color: #F5ABBC; font-family: 'Montserrat', sans-serif;">
+        <body style="background-color: #F5ABBC; font-family: 'Montserrat', sans-serif; padding-top: 20px; padding-bottom: 20px;">
             <div style="background-color: #FFFFFF; border-radius: 10px; padding: 20px; width: 70%; margin: 100px auto;">
-                <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
-                    <img src="https://localpet.online/assets/email.png" alt="logo localpet" loaging="lazy" width="90"/>
-                </div>
+                <div style="width: 100%">
+                    <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
+                        <img src="https://localpet.online/assets/email.png" alt="logo localpet" loaging="lazy" width="90"/>
+                    </div>
+                    </div>
                 <div style="text-align: center">
                     <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Confirma tu cuenta</h1>
                 </div>
