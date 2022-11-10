@@ -55,10 +55,10 @@ const authenticate = async (req, res) => {
     }
 
     const token = generateJWT({ id: user.id, name: user.name });
-    console.log(token);
     return res.status(200).header('authorization', token).json({
         status: 200,
-        user: user
+        user: user,
+        token: token
     });
 }
 
