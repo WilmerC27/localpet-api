@@ -2,8 +2,10 @@ import { DataTypes} from "sequelize";
 import db from "../config/db.js";
 
 const Animals = db.define('animals', {
-    id_animal: {
+    id: {
         type: DataTypes.INTEGER,
+        primaryKey:true,
+        autoIncrement:true,
         allowNull: false
     },
     nombre: {
@@ -40,6 +42,9 @@ const Animals = db.define('animals', {
             model: 'users',
             key: 'id'
         }
+    },
+    img_url: {
+        type: DataTypes.STRING
     }
 });
 

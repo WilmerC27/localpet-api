@@ -5,17 +5,14 @@ import path from 'path';
 const getAnimals = async (req, res) => {
     try {
         let animals = '';
-        if (verified.id == 1) {
-            animals = await Animals.findAll();
-        } else {
-            animals = await Animals.findAll({ where: { idUser: verified.id } });
-        }
+        animals = await Animals.findAll({ where: { id_user: req.user.id } });
         return res.status(200).json({
             status: 200,
             animals
         })
     } catch (error) {
-        return res.json({
+        console.log(error);
+        return res.status(500).json({
             msg: 'Lo sentimos, hubo un error'
         })
     }
@@ -209,4 +206,4 @@ const deleteAnimal = async (req, res) => {
     }
 }
 
-export { createAnimal, editAnimal, deleteAnimal };
+export { getAnimals,createAnimal, editAnimal, deleteAnimal };
