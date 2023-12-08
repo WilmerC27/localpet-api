@@ -14,7 +14,7 @@ const emailRegister = async (data) => {
 
     //Enviar email
     await transport.sendMail({
-        from: 'localpet@localpet.online',
+        from: 'l18530441@cancun.tecnm.mx',
         to: email,
         subject: 'Confirma tu cuenta 🐶',
         text: 'Confirma tu cuenta 🐶',
@@ -34,13 +34,13 @@ const emailRegister = async (data) => {
             <div style="background-color: #FFFFFF; border-radius: 10px; padding: 20px; width: 70%; margin: 100px auto;">
                 <div style="width: 100%">
                     <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
-                        <img src="https://localpet.online/assets/email.png" alt="logo localpet" loaging="lazy" width="90"/>
+                        <img src="https://MyHappyPet.online/assets/email.png" alt="logo My Happy Pet" loaging="lazy" width="90"/>
                     </div>
                     </div>
                 <div style="text-align: center">
                     <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Confirma tu cuenta</h1>
                 </div>
-                <p style="text-align: center">Hola ${name} ${last_name}, Gracias por elegir localpet para buscar tus veterinarias más cercanar y asi cumplir tus necesidades😊</p>
+                <p style="text-align: center">Hola ${name} ${last_name}, Gracias por elegir My Happy Pet para buscar tus veterinarias más cercanar y asi cumplir tus necesidades😊</p>
                 <p style="text-align: center"><span style="color: #FC8D47; font-weight: bold; margin: 20px auto;">¡Tu cuenta ya está lista!🎉</span>, solo debes confirmarla en el siguiente enlace: </p>
                 <br />
                 <div style="text-align: center;">
@@ -68,11 +68,11 @@ const emailForgotPassword = async (datos) => {
         }
     });
 
-    const { email, nombre, token } = datos;
+    const { email, nombre, token, last_name } = datos;
 
     //Enviar email
     await transport.sendMail({
-        from: 'localpet@localpet.online',
+        from: 'l18530441@cancun.tecnm.mx',
         to: email,
         subject: '¡Reestablece tu contraseña 👀!',
         text: '¡Reestablece tu contraseña 👀!',
@@ -91,7 +91,7 @@ const emailForgotPassword = async (datos) => {
         <body style="background-color: #F5ABBC; font-family: 'Montserrat', sans-serif;">
             <div style="background-color: #FFFFFF; border-radius: 10px; padding: 20px; width: 70%; margin: 100px auto;">
                 <div style="margin: -80px auto 0 auto; background-color: #FC8D47; border-radius: 50%; height: 100px; width: 100px;">
-                    <img src="https://localpet.online/assets/email.png" alt="logo localpet" loaging="lazy" width="90"/>
+                    <img src="https://MyHappyPet.online/assets/email.png" alt="logo my happy pet" loaging="lazy" width="90"/>
                 </div>
                 <div style="text-align: center">
                     <h1 style="font-size: 18px; font-weight: bold; text-transform: uppercase;">Recupera tu contraseña</h1>
