@@ -14,7 +14,8 @@ router.get('/home', async (req, res) => {
             name: user.name,
             last_name: user.last_name,
             verified: user.verified,
-            email: user.email
+            email: user.email,
+            rol:user.idRol
         }
     })
 })

@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "author": "Javier Delgado Cambranis",
+  "author": "My Soft / Rodriguez Jimenez Wilmer",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
