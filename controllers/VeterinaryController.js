@@ -6,7 +6,7 @@ const createVeterinary = async (req, res) => {
     const __dirname = path.resolve();
     await check('clee').notEmpty().withMessage('El clee es obligatorio').run(req);
     await check('name').notEmpty().withMessage('El nombre es obligatorio').run(req);
-    await check('email').isEmail().withMessage('El email no es válido').run(req);
+    await check('email').notEmpty().withMessage('El email no es válido').run(req);
     await check('street').notEmpty().withMessage('La calle es obligatoria').run(req);
     await check('colony').notEmpty().withMessage('La colonia es obligatoria').run(req);
     await check('code_postal').isLength({ min: 5, max: 5 }).withMessage('El código postal debe ser igual a 5 digitos').run(req);
@@ -112,6 +112,25 @@ const createVeterinary = async (req, res) => {
         status: 201,
         msg: "¡Veterinaria Registrada Correctamente"
     })
+}
+
+const findAllVeterinaries = async (req, res) => {
+    try {
+        const veterinaries = await Veterinary.findAll();
+        
+        return res.status(200).json({
+            status: 200,
+            veterinaries
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            status: 500,
+            msg: 'Ha ocurrido un error, inténtelo más tarde'
+        });
+    }
+
+
 }
 
 const findVeterinary = async (req, res) => {
@@ -238,4 +257,4 @@ const deleteVeterinary = async (req, res) => {
     }
 }
 
-export { createVeterinary, findVeterinary, editVeterinary, deleteVeterinary };
+export { createVeterinary, findVeterinary, editVeterinary, deleteVeterinary, findAllVeterinaries };
