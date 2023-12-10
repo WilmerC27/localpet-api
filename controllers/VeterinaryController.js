@@ -52,10 +52,6 @@ const createVeterinary = async (req, res) => {
         if (param == 'latitude') {
             errors = { ...errors, latitude: msg };
         }
-        if (req.files == 'imgUrl') {
-            errors = { ...errors, imgUrl: msg };
-
-        }
     });
     if (!result.isEmpty()) {
         return res.status(400).json({
@@ -92,21 +88,21 @@ const createVeterinary = async (req, res) => {
         longitude: longitude,
         latitude: latitude,
         store_number: store_number,
-        imgUrl: `${__dirname}/${nameImage}.jpg`,
+        imgUrl: '',
         idUser: id
     })
 
-    if (req.files) {
-        image = req.files.imgUrl;
-        console.log(image);
-        nameImage = Date.now().toString(32) + Math.random().toString(32).substring(2);
-        image.mv(`./imgVeterinaries/${nameImage}.jpg`, err => {
-            if (err) {
-                return res.status(500).json({ msg: 'Hubo error con la imagen' })
-            }
-            console.log('Imagen Subida Correctamente');
-        })
-    }
+    // if (req.files) {
+    //     image = req.files.imgUrl;
+    //     console.log(image);
+    //     nameImage = Date.now().toString(32) + Math.random().toString(32).substring(2);
+    //     image.mv(`./imgVeterinaries/${nameImage}.jpg`, err => {
+    //         if (err) {
+    //             return res.status(500).json({ msg: 'Hubo error con la imagen' })
+    //         }
+    //         console.log('Imagen Subida Correctamente');
+    //     })
+    // }
 
     return res.status(201).json({
         status: 201,

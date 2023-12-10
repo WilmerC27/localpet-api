@@ -4,6 +4,7 @@ import veterinaryRoutes from './routes/veterinaryRoutes.js';
 import panelRoutes from './routes/panelRoutes.js';
 import animalsRoutes from './routes/animalsRoutes.js'
 import vacunasRoutes from './routes/vacunasRoutes.js'
+import eventsRoutes from './routes/eventsRoutes.js'
 import db from './config/db.js';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
@@ -38,6 +39,7 @@ app.use(fileUpload({
 
 app.use('/api', usersRoutes);
 app.use('/api', veterinaryRoutes);
+app.use('/api', eventsRoutes);
 app.use('/api/panel', panelRoutes);
 app.use('/api/panel', animalsRoutes);
 app.use('/api/panel', vacunasRoutes);
