@@ -13,26 +13,32 @@ const Events = db.define('events', {
         allowNull: false
     },
     fecha: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
     hora: {
-        type: DataTypes.STRING,
+        type: DataTypes.TIME,
         allowNull: false
     },
     descripcion: {
         type: DataTypes.STRING,
         allowNull: false
-    }
-    ,
-    img_url: {
-        type: DataTypes.STRING,
-        allowNull: false
     },
-    datos_url: {
-        type: DataTypes.STRING,
-        allowNull: false
+    id_user: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'users',
+            key: 'id'
+        }
     }
+    // img_url: {
+    //     type: DataTypes.STRING,
+    //     allowNull: true
+    // },
+    // datos_url: {
+    //     type: DataTypes.STRING,
+    //     allowNull: false
+    // }
 });
 
 export default Events;
